@@ -1,12 +1,8 @@
-const product = () => {
-   return(
-  <div className="container mx-auto bg-slate-500">
-   <p className="text-3xl font-bold underline">
-      Hello world!
-    </p>
-  </div>
+import { useSession, signIn, signOut } from "next-auth/react"
 
-   )
+export default function Component() {
+  const { data } = useSession()
+//   const { accessToken } = data
+
+  return <div>{data}</div>
 }
-
-export default product
