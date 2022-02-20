@@ -1,27 +1,34 @@
-import NextAuth from 'next-auth'
-import GIthubProvider from 'next-auth/providers/github'
-import EmailProvider from 'next-auth/providers/email'
-import FacebookProvider from "next-auth/providers/facebook";
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { PrismaClient } from "@prisma/client"
+import EmailProvider from "next-auth/providers/email"
 
-const options = {
-    // sessions: {
-    //     jwt: true
-    // },
-    providers: [
-        
-        GIthubProvider({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET
-        }),
-        //   FacebookProvider({
-        //     clientId: process.env.FACEBOOK_CLIENT_ID,
-        //     clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-        // })
+const prisma = new PrismaClient()
 
-
-        
-    ],
-    database: process.env.DATABASE_URL
-}
-
-export default (req, res) => NextAuth(req, res, options)
+export default NextAuth({
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    // }),
+EmailProvider({
+    server: {
+      host: process.env.EMAIL_SERVER_HOST,
+      port: process.env.EMAIL_SERVER_PORT,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD
+      }
+    },
+    from: process.env.EMAIL_FROM
+  })
+  ],
+  secret: process.env.SECRET,
+  // session: {
+  //   // 
+  //     jwt: true
+  // },
+  debug: true
+})
