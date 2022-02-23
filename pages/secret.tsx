@@ -1,9 +1,10 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
-export default function Secret(){
+const Secret = (props: any) => {
     const {data: session, status}= useSession()
     const [content, setContent] = useState()
+
 
     useEffect(()=>{
         const fetchData = async()=>{
@@ -32,3 +33,5 @@ export default function Secret(){
         <>{content}</>
     )
 }
+
+export default Secret
