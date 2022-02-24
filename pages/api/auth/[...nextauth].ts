@@ -6,10 +6,13 @@ import EmailProvider from "next-auth/providers/email"
 import GitHubProvider from "next-auth/providers/github";
 import  CredentialsProvider  from "next-auth/providers/credentials"
 // import { encode } from "next-auth/jwt"
+import FacebookProvider from 'next-auth/providers/facebook'
 
 const prisma = new PrismaClient()
 const google_id: any = process.env.GOOGLE_ID
 const google_secret: any = process.env.GOOGLE_SECRET
+const fb_id: any = process.env.FACEBOOK_ID
+const fb_secret: any = process.env.FACEBOOK_SECRET
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -22,6 +25,11 @@ export default NextAuth({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET
     }),
+    FacebookProvider({
+      clientId: fb_id,
+      clientSecret: fb_secret
+    }),
+
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
@@ -84,7 +92,4 @@ export default NextAuth({
     }
   },
   debug: true,
-  pages:{
-    signIn: '/signin'
-  }
 })
